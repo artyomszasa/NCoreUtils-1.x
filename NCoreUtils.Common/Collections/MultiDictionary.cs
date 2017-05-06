@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections;
 using System.Runtime.CompilerServices;
+using System.Diagnostics;
 
 namespace NCoreUtils.Collections
 {
@@ -176,10 +177,7 @@ namespace NCoreUtils.Collections
       _entries = newEntries;
     }
 
-    void Resize()
-    {
-      Resize(HashHelper.ExpandPrime(_count), false);
-    }
+    void Resize() => Resize(HashHelper.ExpandPrime(_count), false);
 
     bool FindEntries(TKey key, ICollection<int> entries)
     {
@@ -355,13 +353,11 @@ namespace NCoreUtils.Collections
     }
 
     /// <summary>
-    /// Clones the dictionary. Items are not cloned by copied by reference.
+    /// Clones the dictionary. Items are not cloned but copied by reference.
     /// </summary>
     /// <returns></returns>
     public MultiDictionary<TKey, TValue> Clone()
-    {
-      return new MultiDictionary<TKey, TValue>(_buckets, _entries, _freeIndex, _freeCount, _count, _keyComparer, _valueComparer);
-    }
+      => new MultiDictionary<TKey, TValue>(_buckets, _entries, _freeIndex, _freeCount, _count, _keyComparer, _valueComparer);
 
 
     /// <summary>
@@ -371,9 +367,7 @@ namespace NCoreUtils.Collections
     /// <param name="key">Key.</param>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public int Remove(TKey key)
-    {
-      return Remove(key, index => _keyComparer.Equals(_entries[index].Key, key));
-    }
+      => Remove(key, index => _keyComparer.Equals(_entries[index].Key, key));
 
     /// <summary>
     /// Assignes the specified value to the specified key. Replaces any previous assignments.
@@ -443,9 +437,7 @@ namespace NCoreUtils.Collections
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public bool ContainsKey(TKey key)
-    {
-      return Contains(key, index => _keyComparer.Equals(_entries[index].Key, key));
-    }
+      => Contains(key, index => _keyComparer.Equals(_entries[index].Key, key));
 
     /// <summary>
     /// Adds all values assigned to the specified key to the specified collection.
@@ -589,7 +581,8 @@ namespace NCoreUtils.Collections
     public int Count
     {
       [MethodImpl(MethodImplOptions.AggressiveInlining)]
-      get { return _count - _freeCount; }
+      [DebuggerStepThrough]
+      get => _count - _freeCount;
     }
 
     #endregion

@@ -149,7 +149,7 @@ namespace NCoreUtils.Collections
 
     void Resize(int newSize, bool forceNewHashCodes)
     {
-      RuntimeAssert.GreaterOrEquals(newSize, _entries.Length, nameof(newSize), "entry count");
+      RuntimeAssert.GreaterOrEquals(newSize, _entries.Length, nameof(newSize));
       int[] newBuckets = new int[newSize];
       for (int i = 0; i < newBuckets.Length; i++) newBuckets[i] = -1;
       Entry[] newEntries = new Entry[newSize];
@@ -551,7 +551,7 @@ namespace NCoreUtils.Collections
     {
       RuntimeAssert.ArgumentNotNull(array, nameof(array));
       RuntimeAssert.IndexInRange(arrayIndex, 0, array.Length - 1, nameof(arrayIndex));
-      RuntimeAssert.GreaterOrEquals(array.Length - arrayIndex, _count, "target capacity", "entry count");
+      RuntimeAssert.GreaterOrEquals(array.Length - arrayIndex, _count, nameof(array));
       if (null != _entries)
       {
         for (var i = 0; i < _count; ++i)

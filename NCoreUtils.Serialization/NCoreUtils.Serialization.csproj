@@ -1,28 +1,29 @@
 ﻿<Project>
   <Import Project="Sdk.props" Sdk="Microsoft.NET.Sdk" />
   <PropertyGroup>
-    <VersionPrefix>1.2.2</VersionPrefix>
+    <VersionPrefix>1.0.0</VersionPrefix>
     <TargetFrameworks>netstandard1.6;net45</TargetFrameworks>
     <!-- NuGet -->
-    <PackageId>NCoreUtils.Common</PackageId>
-    <Title>NCoreUtils.Common</Title>
+    <PackageId>NCoreUtils.Serialization</PackageId>
+    <Title>NCoreUtils.Serialization</Title>
     <Authors>Artyom Antyipin</Authors>
-    <Description>Common .NET Core utilities.</Description>
+    <Description>Serialization .NET Core utilities.</Description>
     <Copyright>Artyom Antyipin</Copyright>
     <RepositoryUrl>https://github.com/artyomszasa/NCoreUtils.git</RepositoryUrl>
     <!-- Assembly Info -->
     <Product>NCoreUtils</Product>
-    <AssemblyName>NCoreUtils.Common</AssemblyName>
+    <AssemblyName>NCoreUtils.Serialization</AssemblyName>
     <AssemblyTitle>$(AssemblyName)</AssemblyTitle>
     <!-- Compilation -->
+    <RootNamespace>NCoreUtils</RootNamespace>
     <OutputType>Library</OutputType>
     <DebugType>portable</DebugType>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="System.Collections.Immutable" Version="1.3.1" />
-    <PackageReference Include="System.ValueTuple" Version="4.3.0" />
+    <ProjectReference Include="..\NCoreUtils.Common\NCoreUtils.Common.csproj" />
+    <ProjectReference Include="..\NCoreUtils.Serialization.Abstractions\NCoreUtils.Serialization.Abstractions.csproj" />
   </ItemGroup>
   <!-- .NET Framework specific -->
   <ItemGroup Condition=" '$(TargetFramework)' == 'net45' ">
@@ -33,11 +34,9 @@
   <PropertyGroup Condition=" '$(TargetFramework)' == 'netstandard1.6' ">
     <DefineConstants>$(DefineConstants);NET_CORE</DefineConstants>
   </PropertyGroup>
-  <ItemGroup Condition=" '$(TargetFramework)' == 'netstandard1.6' ">
-    <PackageReference Include="System.ComponentModel.TypeConverter" Version="4.1.0" />
-  </ItemGroup>
   <!-- Target "Pack" for mono. Comment out ItemGroup to avoid conflicts on Windows -->
   <ItemGroup>
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="1.1.1" />
     <PackageReference Include="NuGet.Build.Tasks.Pack" Version="4.0.0" PrivateAssets="All" />
   </ItemGroup>
   <Import Project="Sdk.targets" Sdk="Microsoft.NET.Sdk" />

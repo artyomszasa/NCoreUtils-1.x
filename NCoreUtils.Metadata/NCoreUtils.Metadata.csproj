@@ -1,18 +1,18 @@
 ﻿<Project>
   <Import Project="Sdk.props" Sdk="Microsoft.NET.Sdk" />
   <PropertyGroup>
-    <VersionPrefix>1.2.2</VersionPrefix>
+    <VersionPrefix>1.0.0</VersionPrefix>
     <TargetFrameworks>netstandard1.6;net45</TargetFrameworks>
     <!-- NuGet -->
-    <PackageId>NCoreUtils.Common</PackageId>
-    <Title>NCoreUtils.Common</Title>
+    <PackageId>NCoreUtils.Metadata</PackageId>
+    <Title>NCoreUtils.Metadata</Title>
     <Authors>Artyom Antyipin</Authors>
-    <Description>Common .NET Core utilities.</Description>
+    <Description>.NET custom metadata.</Description>
     <Copyright>Artyom Antyipin</Copyright>
     <RepositoryUrl>https://github.com/artyomszasa/NCoreUtils.git</RepositoryUrl>
     <!-- Assembly Info -->
     <Product>NCoreUtils</Product>
-    <AssemblyName>NCoreUtils.Common</AssemblyName>
+    <AssemblyName>NCoreUtils.Metadata</AssemblyName>
     <AssemblyTitle>$(AssemblyName)</AssemblyTitle>
     <!-- Compilation -->
     <OutputType>Library</OutputType>
@@ -21,21 +21,17 @@
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="System.Collections.Immutable" Version="1.3.1" />
-    <PackageReference Include="System.ValueTuple" Version="4.3.0" />
+    <ProjectReference Include="..\NCoreUtils.Common\NCoreUtils.Common.csproj" />
+    <ProjectReference Include="..\NCoreUtils.Metadata.Abstractions\NCoreUtils.Metadata.Abstractions.csproj" />
   </ItemGroup>
-  <!-- .NET Framework specific -->
-  <ItemGroup Condition=" '$(TargetFramework)' == 'net45' ">
-    <Reference Include="System" />
-    <Reference Include="Microsoft.CSharp" />
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="1.1.1" />
+    <PackageReference Include="System.Collections.Immutable" Version="1.3.1" />
   </ItemGroup>
   <!-- .NET Standard specific -->
   <PropertyGroup Condition=" '$(TargetFramework)' == 'netstandard1.6' ">
     <DefineConstants>$(DefineConstants);NET_CORE</DefineConstants>
   </PropertyGroup>
-  <ItemGroup Condition=" '$(TargetFramework)' == 'netstandard1.6' ">
-    <PackageReference Include="System.ComponentModel.TypeConverter" Version="4.1.0" />
-  </ItemGroup>
   <!-- Target "Pack" for mono. Comment out ItemGroup to avoid conflicts on Windows -->
   <ItemGroup>
     <PackageReference Include="NuGet.Build.Tasks.Pack" Version="4.0.0" PrivateAssets="All" />

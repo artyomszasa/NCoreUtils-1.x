@@ -2,17 +2,33 @@ using System;
 using System.ComponentModel;
 using System.Linq;
 using System.Reflection;
+#if NET45
+using System.Runtime.Serialization;
+#endif
 
 namespace NCoreUtils.Reflection
 {
   /// <summary>
   /// Member accessor wrapper around property or field.
   /// </summary>
+  #if NET45
+  [Serializable]
+  #endif
   public abstract class MemberAccessor : IMemberAccessor, IEquatable<MemberAccessor>
+  #if NET45
+  , ISerializable
+  #endif
   {
+    #if NET45
+    const string KeyType = "MemberAccessor.Type";
+    const string KeyMember = "MemberAccessor.Member";
+    #endif
     /// <summary>
     /// Member accessor wrapper around property.
     /// </summary>
+    #if NET45
+    [Serializable]
+    #endif
     public class PropertyAccessor : MemberAccessor
     {
       /// <summary>
@@ -60,10 +76,38 @@ namespace NCoreUtils.Reflection
       /// <param name="instance">Object to use.</param>
       /// <param name="value">Value to set.</param>
       public override void SetValue(object instance, object value) => PropertyInfo.SetValue(instance, value, null);
+      #if NET45
+      /// <summary>
+      /// Initializes new instance of <see cref="T:NCoreUtils.Reflection.MemberAccessor+PropertyAccessor" /> during
+      /// deserialization.
+      /// </summary>
+      /// <param name="info">
+      /// The <c>SerializationInfo</c> that holds the serialized object data about the exception being thrown.
+      /// </param>
+      /// <param name="context">
+      /// The <c>StreamingContext</c> that contains contextual information about the source or destination.
+      /// </param>
+      protected PropertyAccessor(SerializationInfo info, StreamingContext context)
+      {
+        var type = Type.GetType(info.GetString(KeyType), true);
+        var prop = type.GetProperty(info.GetString(KeyMember));
+        RuntimeAssert.ArgumentNotNull(prop, "propertyInfo");
+        PropertyInfo = prop;
+      }
+      /// <inheritdoc />
+      protected override void GetObjectData(SerializationInfo info, StreamingContext context)
+      {
+        info.AddValue(KeyType, PropertyInfo.DeclaringType.AssemblyQualifiedName);
+        info.AddValue(KeyMember, PropertyInfo.Name);
+      }
+      #endif
     }
     /// <summary>
     /// Member accessor wrapper around field.
     /// </summary>
+    #if NET45
+    [Serializable]
+    #endif
     public class FieldAccessor : MemberAccessor
     {
       /// <summary>
@@ -113,6 +157,31 @@ namespace NCoreUtils.Reflection
       /// <param name="instance">Object to use.</param>
       /// <param name="value">Value to set.</param>
       public override void SetValue(object instance, object value) => FieldInfo.SetValue(instance, value);
+      #if NET45
+      /// <summary>
+      /// Initializes new instance of <see cref="T:NCoreUtils.Reflection.MemberAccessor+FieldAccessor" /> during
+      /// deserialization.
+      /// </summary>
+      /// <param name="info">
+      /// The <c>SerializationInfo</c> that holds the serialized object data about the exception being thrown.
+      /// </param>
+      /// <param name="context">
+      /// The <c>StreamingContext</c> that contains contextual information about the source or destination.
+      /// </param>
+      protected FieldAccessor(SerializationInfo info, StreamingContext context)
+      {
+        var type = Type.GetType(info.GetString(KeyType), true);
+        var prop = type.GetField(info.GetString(KeyMember));
+        RuntimeAssert.ArgumentNotNull(prop, "propertyInfo");
+        FieldInfo = prop;
+      }
+      /// <inheritdoc />
+      protected override void GetObjectData(SerializationInfo info, StreamingContext context)
+      {
+        info.AddValue(KeyType, FieldInfo.DeclaringType.AssemblyQualifiedName);
+        info.AddValue(KeyMember, FieldInfo.Name);
+      }
+      #endif
     }
     /// <summary>
     /// Creates new accessor from the specified field.
@@ -249,5 +318,14 @@ namespace NCoreUtils.Reflection
     /// <param name="instance">Object to use.</param>
     /// <param name="value">Value to set.</param>
     public abstract void SetValue(object instance, object value);
+    #if NET45
+    /// <summary>
+    /// Populates a <c>SerializationInfo</c> with the data needed to serialize the target object.
+    /// </summary>
+    /// <param name="info">The <c>SerializationInfo</c> to populate with data.</param>
+    /// <param name="context">The destination for this serialization.</param>
+    protected abstract void GetObjectData(SerializationInfo info, StreamingContext context);
+    void ISerializable.GetObjectData(SerializationInfo info, StreamingContext context) => GetObjectData(info, context);
+    #endif
   }
 }

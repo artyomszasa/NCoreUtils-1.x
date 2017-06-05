@@ -98,7 +98,7 @@ namespace NCoreUtils
         /// <c>false</c>.
         /// </returns>
         public static bool Contains<T>(this Maybe<T> maybe, T value)
-            => maybe.HasValue && Maybe<T>._comparer.Equals(maybe.Value, value);
+            => maybe.Contains(value, Maybe<T>._comparer);
         /// <summary>
         /// Determines whether a container contains a specified element by using a specified
         /// <see cref="T:System.Collections.Generic.IEqualityComparer{T}" />.

@@ -23,7 +23,7 @@ namespace NCoreUtils.Metadata
         /// <returns>
         /// <c>true</c> if required flag has been set, <c>false</c> otherwise.
         /// </returns>
-        public static bool IsRequired(this ICompositeMetadata compositeData)
+        public static bool Required(this ICompositeMetadata compositeData)
             => compositeData.TryGetMetadata(out RequiredFlag flag) && flag.Value;
     }
 }

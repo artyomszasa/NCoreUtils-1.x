@@ -89,6 +89,25 @@ namespace NCoreUtils
         /// </returns>
         public static Maybe<T> AsMaybe<T>(this T value) => new Maybe<T>(value);
         /// <summary>
+        /// Invokes a function on a maybe value that itself yields a maybe.
+        /// </summary>
+        /// <typeparam name="TSource">Type of the input.</typeparam>
+        /// <typeparam name="TResult">Type of the result.</typeparam>
+        /// <param name="maybe">The input maybe.</param>
+        /// <param name="binder">
+        /// A function that takes the value of type <typeparamref name="TSource" /> from a maybe and transforms it into
+        /// a maybe containing a value of type <typeparamref name="TResult" />.
+        /// </param>
+        /// <returns>A maybe of the output type of the binder.</returns>
+        public static Maybe<TResult> Bind<TSource, TResult>(this Maybe<TSource> maybe, Func<TSource, Maybe<TResult>> binder)
+        {
+            if (maybe.TryGetValue(out var input))
+            {
+                return binder(input);
+            }
+            return Maybe.Empty;
+        }
+        /// <summary>
         /// Determines whether a container contains a specified element by using the default equality comparer.
         /// </summary>
         /// <param name="maybe">Source container.</param>

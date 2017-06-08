@@ -81,6 +81,16 @@ namespace NCoreUtils.Metadata
         /// <inheritdoc />
         public bool ContainsMetadata<TMetdata>() where TMetdata : IMetadata
             => _metadata.ContainsKey(typeof(TMetdata));
+        /// <summary>
+        /// Allows overriding object activation. By default object activated using service provider and explicit metadata as argument.
+        /// </summary>
+        /// <param name="serviceProvider">Service provider.</param>
+        /// <param name="explicitMetadata">Explicit metadata assigned to the builder.</param>
+        /// <returns>Target object instance.</returns>
+        protected virtual T Activate(IServiceProvider serviceProvider, ImmutableDictionary<Type, IMetadata> explicitMetadata)
+        {
+            return ActivatorUtilities.CreateInstance<T>(serviceProvider, explicitMetadata);
+        }
         /// <inheritdoc />
         public T Initialize(IServiceProvider serviceProvider)
         {
@@ -90,7 +100,7 @@ namespace NCoreUtils.Metadata
                 .ForEach(kv => builder.Builder.Add(kv.Key, kv.Value));
             _metadata.MaybeChoose(kv => BoxedMatcher.TryInitialize(kv.Value, serviceProvider, builder).Select(md => KeyValuePair.Create(kv.Key, md)))
                 .ForEach(kv => builder.Builder.Add(kv.Key, kv.Value));
-            return ActivatorUtilities.CreateInstance<T>(serviceProvider, builder.Builder.ToImmutable());
+            return Activate(serviceProvider, builder.Builder.ToImmutable());
         }
     }
 }

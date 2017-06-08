@@ -12,7 +12,7 @@ namespace NCoreUtils.Metadata
         /// <param name="maxLength">Maximum string length value.</param>
         /// <param name="minLength">Minimum string length value.</param>
         /// <returns>Target builder.</returns>
-        public static TBuilder StringLength<TBuilder>(this TBuilder builder, int maxLength, int? minLength = null)
+        public static TBuilder HasStringLength<TBuilder>(this TBuilder builder, int maxLength, int? minLength = null)
             where TBuilder : ICompositeMetdataBuilder
             => builder.SetMetadata(new StringLength(maxLength, minLength));
         /// <summary>

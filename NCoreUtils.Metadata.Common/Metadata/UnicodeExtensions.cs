@@ -21,7 +21,7 @@ namespace NCoreUtils.Metadata
         /// <returns>
         /// <c>true</c> if unicode flag has been set, <c>false</c> otherwise.
         /// </returns>
-        public static bool? IsUnicode(this ICompositeMetadata compositeData)
+        public static bool? Unicode(this ICompositeMetadata compositeData)
             => compositeData.TryGetMetadata<Unicode>(out var u) ? (bool?)u.Value : null;
     }
 }

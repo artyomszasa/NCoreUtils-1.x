@@ -23,7 +23,7 @@ namespace NCoreUtils.Metadata
         /// <returns>
         /// <c>true</c> if read-only flag has been set, <c>false</c> otherwise.
         /// </returns>
-        public static bool IsReadOnly(this ICompositeMetadata compositeData)
+        public static bool ReadOnly(this ICompositeMetadata compositeData)
             => compositeData.TryGetMetadata(out ReadOnlyFlag flag) && flag.Value;
     }
 }

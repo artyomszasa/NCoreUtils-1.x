@@ -12,7 +12,7 @@ namespace NCoreUtils.Metadata
         /// <param name="precision">Precision value.</param>
         /// <param name="scale">Scale value.</param>
         /// <returns>Target builder.</returns>
-        public static TBuilder Precision<TBuilder>(this TBuilder builder, byte precision, byte scale)
+        public static TBuilder HasPrecision<TBuilder>(this TBuilder builder, byte precision, byte scale)
             where TBuilder : ICompositeMetdataBuilder
             => builder.SetMetadata(new Precision(precision, scale));
         /// <summary>

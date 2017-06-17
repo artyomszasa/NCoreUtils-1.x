@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using Xunit;
 
-namespace NCoreUtils.Common
+namespace NCoreUtils
 {
     public class CaseInsensitiveTests
     {

@@ -158,6 +158,16 @@ namespace NCoreUtils
         /// </exception>
         public static T Get<T>(this Maybe<T> maybe)
             => maybe.HasValue ? maybe.Value : throw new InvalidOperationException("No value.");
+
+        /// <summary>
+        /// Either retrieves the stored element or creates new value using specified value factory.
+        /// </summary>
+        /// <param name="maybe">Source container.</param>
+        /// <param name="valueFactory">Value factory.</param>
+        /// <returns>Either the stored element or new value created using specified value factory.</returns>
+        public static T GetOrSupply<T>(this Maybe<T> maybe, Func<T> valueFactory)
+            => maybe.HasValue ? maybe.Value : valueFactory();
+
         /// <summary>
         /// Retrieves the stored element or the default value.
         /// </summary>
